@@ -124,10 +124,12 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func buildFilterQuery() {
+        var temp : [String] = []
         filter.forEach { item in
             queryForGET.append(URLQueryItem(name: "filter\(item.queryForGET.0)", value: "\(item.queryForGET.1)"))
-            queryForPOST += "where " + item.queryForPOST + ";"
+            temp.append(item.queryForPOST)
         }
+        queryForPOST += "where \(temp.joined(separator: "&"));"
     }
     
     func search(_ query: String) -> QueryBuilderProtocol {
