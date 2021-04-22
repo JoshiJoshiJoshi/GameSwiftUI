@@ -20,11 +20,11 @@ protocol RequestBuilderProtocol {
 }
 
 class RequestBuilder : RequestBuilderProtocol{
-    private var https: Bool = true
-    private var baseUrl: String = ""
-    private var endpoint: String = ""
+    private var https: Bool = RequestPreset.defaultHttps
+    private var baseUrl: String = RequestPreset.defaultBaseUrl
+    private var endpoint: String = RequestPreset.defaultEndpoint
     private var query: Query!
-    private var requestMethod: RequestMethod = .GET
+    private var requestMethod: RequestMethod = RequestPreset.defaultRequestMethod
     private var headers: [String : String] = [:]
     
     func useHTTPS(_ bool: Bool) -> RequestBuilderProtocol {

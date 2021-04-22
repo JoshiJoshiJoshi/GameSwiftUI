@@ -26,10 +26,12 @@ struct QueryPreset {
     static let defaultSearch: String = ""
 }
 
-//struct RequestPreset {
-//    static let defaultHttps: Bool = true
-//    
-//}
+struct RequestPreset {
+    static let defaultHttps: Bool = true
+    static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
+    static let defaultEndpoint: String = RequestEndpoints.games
+    static let defaultRequestMethod: RequestMethod = .GET
+}
 
 enum RequestBaseUrl: String {
     case INOFFICIAL = "api.research.sx"
