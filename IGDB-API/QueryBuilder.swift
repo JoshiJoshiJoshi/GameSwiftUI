@@ -109,10 +109,7 @@ class QueryBuilder : QueryBuilderProtocol {
         return self
     }
     
-    private func buildSortQuery() throws {
-        guard search == "" else {
-            throw QueryError.invalidInput("Search and sorting cannot be used together.")
-        }
+    private func buildSortQuery() {
         queryForGET.append(URLQueryItem(name: "order", value: "\(sort):\(sortOrder.rawValue)"))
         queryForPOST += "sort " + "\(sort) \(sortOrder.rawValue)" + ";"
     }
@@ -138,8 +135,7 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func buildSearchQuery() {
-        queryForGET.append(URLQueryItem(name: "search", value: search))
-        queryForPOST += "search " + "\"\(search)\"" + ";"
+        filter(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
     }
     
     private func setDefault() {
@@ -164,7 +160,7 @@ class QueryBuilder : QueryBuilderProtocol {
             if (!excludedFields.isEmpty) { buildExcludeQuery() }
             if (!search.isEmpty) { buildSearchQuery() }
             if (!filter.isEmpty) { buildFilterQuery() }
-            if (!sort.isEmpty) { try buildSortQuery() }
+            if (!sort.isEmpty) { buildSortQuery() }
         }
         catch QueryError.invalidInput(let msg){ fatalError(msg) }
         catch { fatalError("Unknown error occurred.") }
