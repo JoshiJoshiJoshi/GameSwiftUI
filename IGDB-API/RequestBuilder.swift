@@ -26,6 +26,16 @@ class RequestBuilder : RequestBuilderProtocol{
     private var query: Query!
     private var requestMethod: RequestMethod = RequestPreset.defaultRequestMethod
     private var headers: [String : String] = [:]
+    private var defaultAuth: [String : String] {
+        get {
+            switch AuthConfig.defaultAuthMethod {
+            case .NONE:
+                return [:]
+            case .OAUTH:
+                return AuthConfig.OAuth.credentials
+            }
+        }
+    }
     
     func useHTTPS(_ bool: Bool) -> RequestBuilderProtocol {
         self.https = bool
@@ -96,11 +106,14 @@ class RequestBuilder : RequestBuilderProtocol{
         }
     
         for credential in defaultAuth {
+            urlRequest.addValue(credential.value, forHTTPHeaderField: credential.key)
+        }
         setDefault()
         return urlRequest
     }
 }
 
+enum RequestMethod: String {
     case GET = "GET"
     case POST = "POST"
 }
@@ -108,3 +121,4 @@ class RequestBuilder : RequestBuilderProtocol{
 enum RequestAuthMethod {
     case NONE
     case OAUTH
+}

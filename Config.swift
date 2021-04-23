@@ -26,19 +26,29 @@ struct QueryPreset {
     static let defaultSearch: String = ""
 }
 
-struct RequestPreset {
-    static let defaultHttps: Bool = true
-    static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
-    static let defaultEndpoint: String = RequestEndpoints.games
-    static let defaultRequestMethod: RequestMethod = .GET
-}
-
 enum RequestBaseUrl: String {
     case INOFFICIAL = "api.research.sx"
     case OFFICIAL = "api.igdb.com"
 }
 
+struct RequestPreset {
+    static let defaultHttps: Bool = true
+    // IGDB OAuth credentials are required for 'OFFICIAL'
+    static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
+    static let defaultEndpoint: String = RequestEndpoints.games
+    static let defaultRequestMethod: RequestMethod = .GET
+}
+
 struct IGDBConfig {
     static let currentApiVersion: String = "v4"    
+}
+
+struct AuthConfig {
+    static let defaultAuthMethod: RequestAuthMethod = .OAUTH
+    struct OAuth {
+        private static let clientId: String = ""
+        private static let bearer: String = ""
+        static let credentials: [String : String] = ["Client-ID" : clientId, "Authorization" : "Bearer \(bearer)"]
+    }
 }
 // ---------------------------------------- IGDB ---------------------------------------- //
