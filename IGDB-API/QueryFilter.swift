@@ -6,14 +6,12 @@
 //
 
 import Foundation
-// Resource
+// Resources
 // https://api-docs.igdb.com/#filters
 
 protocol QueryFilterProtocol {
-    // Revisit: POST-method doesn't work due to wrong string conversion
     func isEqual(string: String, prefix: Bool, postfix: Bool) -> QueryBuilderProtocol
     func isEqual(value: Int) -> QueryBuilderProtocol
-    // Revisit: POST-method doesn't work due to wrong string conversion
     func isNotEqual(string: String, prefix: Bool, postfix: Bool) -> QueryBuilderProtocol
     func isNotEqual(value: Int) -> QueryBuilderProtocol
     func isGreaterThan(value: Int) -> QueryBuilderProtocol
@@ -38,7 +36,7 @@ class QueryFilter : QueryFilterProtocol {
     func isEqual(string: String, prefix: Bool = false, postfix: Bool = false) -> QueryBuilderProtocol {
         let tempStr = "\(postfix ? "*" : "")\"\(string)\"\(prefix ? "*" : "")"
         queryForGET = ("[\(self.field)][eq]", "\(tempStr)")
-        queryForPOST += "\(self.field)~\(tempStr)"
+        queryForPOST += "\(self.field)=\(tempStr)"
         return queryBuilder
     }
     

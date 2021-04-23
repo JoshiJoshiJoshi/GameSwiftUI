@@ -8,16 +8,16 @@
 import Foundation
 
 protocol QueryBuilderProtocol {
-    func limit(_ value: Int) -> QueryBuilderProtocol // finished
-    func offset(_ value: Int) -> QueryBuilderProtocol // finished
-    func include(_ field: String...) -> QueryBuilderProtocol // finished
-    func include(_ fields: [String]) -> QueryBuilderProtocol // finished
-    func exclude(_ field: String...) -> QueryBuilderProtocol // finished
-    func exclude(_ fields: [String]) -> QueryBuilderProtocol // finished
-    func sort(field: String, order: SortOrder) -> QueryBuilderProtocol // finished
-    func filter(field: String) -> QueryFilterProtocol // finished
-    func search(_ query: String) -> QueryBuilderProtocol // Revisit: Keep or delete? 'filter' is way superior
-    func build() -> Query // Revisit: 'setDefault()' implemented to make dependency injection work - right approach?
+    func limit(_ value: Int) -> QueryBuilderProtocol
+    func offset(_ value: Int) -> QueryBuilderProtocol
+    func include(_ field: String...) -> QueryBuilderProtocol
+    func include(_ fields: [String]) -> QueryBuilderProtocol
+    func exclude(_ field: String...) -> QueryBuilderProtocol
+    func exclude(_ fields: [String]) -> QueryBuilderProtocol
+    func sort(field: String, order: SortOrder) -> QueryBuilderProtocol
+    func filter(field: String) -> QueryFilterProtocol
+    func search(_ query: String) -> QueryBuilderProtocol
+    func build() -> Query
 }
 
 class QueryBuilder : QueryBuilderProtocol {
@@ -169,19 +169,17 @@ class QueryBuilder : QueryBuilderProtocol {
         catch QueryError.invalidInput(let msg){ fatalError(msg) }
         catch { fatalError("Unknown error occurred.") }
         
-        // Revisit
         let query = Query(queryForGET: queryForGET, queryForPOST: queryForPOST)
         setDefault()
         return query
     }
 }
 
-
 enum SortOrder: String {
     case ASCENDING = "asc", DESCENDING = "desc"
 }
 
-enum QueryError: Error {
+fileprivate enum QueryError: Error {
     case invalidInput(String)
 }
 
@@ -191,8 +189,7 @@ class Query {
     
     init(queryForGET: [URLQueryItem], queryForPOST : String) {
         self.queryForGET = queryForGET
-//        self.queryForPOST = queryForPOST
-        self.queryForPOST = queryForPOST.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+        self.queryForPOST = queryForPOST
     }
 }
 

@@ -38,33 +38,22 @@ class SearchViewModel : ObservableObject {
             .flatMap {
                 gameService.fetchGames(for: $0)
             }
-            .receive(on: DispatchQueue.main) // q
+            .receive(on: DispatchQueue.main)
             .assign(to: \.searchResults, on: self)
-            .store(in: &subscriptions) // q
+            .store(in: &subscriptions)
     }
     
     func searchGames(title: String) -> URLRequest {
         let query = queryBuilder
-            .limit(100)
-            .include(RequestConstants.Game.name,
-                     RequestConstants.Game.summary,
-                     RequestConstants.Game.storyline,
-                     RequestConstants.Cover.imageId,
-                     RequestConstants.Game.firstReleaseDate,
-                     RequestConstants.Game.totalRating)
             .filter(field: RequestConstants.Game.name)
             .isEqual(string: title, prefix: true, postfix: false)
             .filter(field: RequestConstants.Game.category)
             .isEqual(value: 0)
-            .sort(field: RequestConstants.Game.firstReleaseDate, order: .DESCENDING)
             .build()
-
         
         let searchUrl = requestBuilder
-            .setBaseUrl(.INOFFICIAL)
-            .setEndpoint(RequestEndpoints.games)
-            .setRequestMethod(.POST)
             .setQuery(query)
+            .setBaseUrl(.INOFFICIAL)
             .build()
         
         return searchUrl

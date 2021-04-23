@@ -32,12 +32,6 @@ struct ContentView: View {
                 Image(systemName: "magnifyingglass")
                 Text("Search")
             }
-            .onAppear() {
-
-//                let url = RequestBuilder()
-//                    .
-//                print("XD QUERY: \(query)")
-            }
         }
     }
 }

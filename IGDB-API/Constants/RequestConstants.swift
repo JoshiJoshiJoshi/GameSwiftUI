@@ -7,11 +7,6 @@
 
 import Foundation
 
-enum RequestMethod: String {
-    case GET = "GET"
-    case POST = "POST"
-}
-
 struct RequestEndpoints {
     static let games = "/\(IGDBConfig.currentApiVersion)/\(APIConstants.Game._base)"
     

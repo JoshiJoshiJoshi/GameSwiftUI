@@ -11,12 +11,12 @@
 import Foundation
 
 protocol RequestBuilderProtocol {
-    func setBaseUrl(_ url: RequestBaseUrl) -> RequestBuilderProtocol // finished
-    func setEndpoint(_ string: String) -> RequestBuilderProtocol // finished
-    func setQuery(_ query: Query) -> RequestBuilderProtocol // finished
-    func setRequestMethod(_ method: RequestMethod) -> RequestBuilderProtocol // finished
-    func addHeader(_ key: String, _ value: String) -> RequestBuilderProtocol // finished
-    func build() -> URLRequest // Revisit: 'reset()' implemented for DI - right approach?
+    func setBaseUrl(_ url: RequestBaseUrl) -> RequestBuilderProtocol
+    func setEndpoint(_ string: String) -> RequestBuilderProtocol
+    func setQuery(_ query: Query) -> RequestBuilderProtocol
+    func setRequestMethod(_ method: RequestMethod) -> RequestBuilderProtocol
+    func addHeader(_ key: String, _ value: String) -> RequestBuilderProtocol
+    func build() -> URLRequest
 }
 
 class RequestBuilder : RequestBuilderProtocol{
@@ -56,11 +56,11 @@ class RequestBuilder : RequestBuilderProtocol{
         return self
     }
     
-    private func reset() {
-        self.https = true
-        self.baseUrl = ""
-        self.endpoint = ""
-        self.requestMethod = .GET
+    private func setDefault() {
+        self.https = RequestPreset.defaultHttps
+        self.baseUrl = RequestPreset.defaultBaseUrl
+        self.endpoint = RequestPreset.defaultEndpoint
+        self.requestMethod = RequestPreset.defaultRequestMethod
         self.headers = [:]
     }
 
@@ -75,14 +75,11 @@ class RequestBuilder : RequestBuilderProtocol{
         case .GET:
             urlComponents.queryItems = query.queryForGET
             urlRequest = URLRequest(url: urlComponents.url!)
-            print("GET " + String(decoding: urlRequest.httpBody!, as: UTF8.self))
             break;
         case .POST:
             urlRequest = URLRequest(url: urlComponents.url!)
             urlRequest.setValue("text/plain", forHTTPHeaderField: "Content-Type")
-            // this code below is being stupid ok
-            urlRequest.httpBody = query.queryForPOST.data(using: .ascii)
-            print("POST " + String(decoding: urlRequest.httpBody!, as: UTF8.self))
+            urlRequest.httpBody = query.queryForPOST.data(using: .utf8)
             break;
         }
         urlRequest.httpMethod = requestMethod.rawValue
@@ -97,10 +94,17 @@ class RequestBuilder : RequestBuilderProtocol{
         for header in headers {
             urlRequest.addValue(header.value, forHTTPHeaderField: header.key)
         }
-
-        reset()
+    
+        for credential in defaultAuth {
+        setDefault()
         return urlRequest
     }
- 
 }
 
+    case GET = "GET"
+    case POST = "POST"
+}
+
+enum RequestAuthMethod {
+    case NONE
+    case OAUTH

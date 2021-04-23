@@ -11,7 +11,6 @@ import SwiftUI
 struct GameSwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
-            //NewsView()
            ContentView()
         }
     }
