@@ -8,22 +8,45 @@
 import Foundation
 
 // ---------------------------------------- IGDB ---------------------------------------- //
-struct QueryPreset {
-    static let defaultIncludedFields: [String] = [RequestConstants.Game.name,
-                                                  RequestConstants.Cover.imageId,
-                                                  RequestConstants.Game.summary,
-                                                  RequestConstants.Game.storyline,
-                                                  RequestConstants.Game.firstReleaseDate,
-                                                  RequestConstants.Game.totalRating]
-    static let defaultLimit: Int = 60
-    static let defaultOffset: Int = 0
-    static let defaultExcludedFields : [String] = []
-    static let defaultSortField: String = RequestConstants.Game.firstReleaseDate
-    static let defaultSortOrder: SortOrder = .DESCENDING
-    // Not yet implemented
-    static let defaultFilter: [QueryFilter] = []
-    // DO NOT TOUCH.
-    static let defaultSearch: String = ""
+struct Config {
+    struct Query {
+        static let defaultIncludedFields: [String] = [RequestConstants.Game.name,
+                                                      RequestConstants.Cover.imageId,
+                                                      RequestConstants.Game.summary,
+                                                      RequestConstants.Game.storyline,
+                                                      RequestConstants.Game.firstReleaseDate,
+                                                      RequestConstants.Game.totalRating]
+        static let defaultLimit: Int = 100
+        static let defaultOffset: Int = 0
+        static let defaultExcludedFields: [String] = []
+        static let defaultSortField: String = RequestConstants.Game.firstReleaseDate
+        static let defaultSortOrder: SortOrder = .DESCENDING
+        // Not yet implemented
+        static let defaultFilter: [QueryFilter] = []
+        // DO NOT TOUCH.
+        static let defaultSearch: String = ""
+    }
+    
+    struct Request {
+        static let defaultHttps: Bool = true
+        // IGDB OAuth credentials are required for 'OFFICIAL'
+        static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
+        static let defaultEndpoint: String = RequestEndpoints.games
+        static let defaultRequestMethod: RequestMethod = .GET
+    }
+    
+    struct IGDB {
+        static let currentApiVersion: String = "v4"
+    }
+    
+    struct Auth {
+        static let defaultAuthMethod: RequestAuthMethod = .OAUTH
+        struct OAuth {
+            private static let clientId: String = ""
+            private static let bearer: String = ""
+            static let credentials: [String : String] = ["Client-ID" : clientId, "Authorization" : "Bearer \(bearer)"]
+        }
+    }
 }
 
 enum RequestBaseUrl: String {
@@ -31,24 +54,4 @@ enum RequestBaseUrl: String {
     case OFFICIAL = "api.igdb.com"
 }
 
-struct RequestPreset {
-    static let defaultHttps: Bool = true
-    // IGDB OAuth credentials are required for 'OFFICIAL'
-    static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
-    static let defaultEndpoint: String = RequestEndpoints.games
-    static let defaultRequestMethod: RequestMethod = .GET
-}
-
-struct IGDBConfig {
-    static let currentApiVersion: String = "v4"    
-}
-
-struct AuthConfig {
-    static let defaultAuthMethod: RequestAuthMethod = .OAUTH
-    struct OAuth {
-        private static let clientId: String = ""
-        private static let bearer: String = ""
-        static let credentials: [String : String] = ["Client-ID" : clientId, "Authorization" : "Bearer \(bearer)"]
-    }
-}
 // ---------------------------------------- IGDB ---------------------------------------- //

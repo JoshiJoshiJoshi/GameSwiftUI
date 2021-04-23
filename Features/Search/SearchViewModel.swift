@@ -45,17 +45,21 @@ class SearchViewModel : ObservableObject {
     
     func searchGames(title: String) -> URLRequest {
         let query = queryBuilder
-            .filter(field: RequestConstants.Game.name)
-            .isEqual(string: title, prefix: true, postfix: false)
+            .search(title)
             .filter(field: RequestConstants.Game.category)
             .isEqual(value: 0)
             .build()
         
         let searchUrl = requestBuilder
             .setQuery(query)
-            .setBaseUrl(.INOFFICIAL)
+            .setRequestMethod(.POST)
+            .setBaseUrl(.OFFICIAL)
+            .setEndpoint(RequestEndpoints.games)
             .build()
         
+        print("Header: \(searchUrl.allHTTPHeaderFields)")
+        print("URL: \(searchUrl.url?.absoluteString)")
+        print("Body: \(String(decoding: searchUrl.httpBody!, as: UTF8.self))")
         return searchUrl
     }
 }

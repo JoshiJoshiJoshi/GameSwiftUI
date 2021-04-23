@@ -21,14 +21,14 @@ protocol QueryBuilderProtocol {
 }
 
 class QueryBuilder : QueryBuilderProtocol {
-    private var limit: Int = QueryPreset.defaultLimit
-    private var offset: Int = QueryPreset.defaultOffset
-    private var includedFields: Set<String> = Set(QueryPreset.defaultIncludedFields)
-    private var excludedFields: Set<String> = Set(QueryPreset.defaultExcludedFields)
-    private var filter: [QueryFilter] = QueryPreset.defaultFilter
-    private var search: String = QueryPreset.defaultSearch
-    private var sort: String = QueryPreset.defaultSortField
-    private var sortOrder: SortOrder = QueryPreset.defaultSortOrder
+    private var limit: Int = Config.Query.defaultLimit
+    private var offset: Int = Config.Query.defaultOffset
+    private var includedFields: Set<String> = Set(Config.Query.defaultIncludedFields)
+    private var excludedFields: Set<String> = Set(Config.Query.defaultExcludedFields)
+    private var filter: [QueryFilter] = Config.Query.defaultFilter
+    private var search: String = Config.Query.defaultSearch
+    private var sort: String = Config.Query.defaultSortField
+    private var sortOrder: SortOrder = Config.Query.defaultSortOrder
     private var queryForGET: [URLQueryItem] = []
     private var queryForPOST: String = ""
     
@@ -139,14 +139,14 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func setDefault() {
-        limit = QueryPreset.defaultLimit
-        offset = QueryPreset.defaultOffset
-        includedFields = Set(QueryPreset.defaultIncludedFields)
-        excludedFields = Set(QueryPreset.defaultExcludedFields)
-        search = QueryPreset.defaultSearch
-        sort = QueryPreset.defaultSortField
-        sortOrder = QueryPreset.defaultSortOrder
-        filter = QueryPreset.defaultFilter
+        limit = Config.Query.defaultLimit
+        offset = Config.Query.defaultOffset
+        includedFields = Set(Config.Query.defaultIncludedFields)
+        excludedFields = Set(Config.Query.defaultExcludedFields)
+        search = Config.Query.defaultSearch
+        sort = Config.Query.defaultSortField
+        sortOrder = Config.Query.defaultSortOrder
+        filter = Config.Query.defaultFilter
     
         queryForGET = []
         queryForPOST = ""

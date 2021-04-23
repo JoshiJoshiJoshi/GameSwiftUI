@@ -20,19 +20,19 @@ protocol RequestBuilderProtocol {
 }
 
 class RequestBuilder : RequestBuilderProtocol{
-    private var https: Bool = RequestPreset.defaultHttps
-    private var baseUrl: String = RequestPreset.defaultBaseUrl
-    private var endpoint: String = RequestPreset.defaultEndpoint
+    private var https: Bool = Config.Request.defaultHttps
+    private var baseUrl: String = Config.Request.defaultBaseUrl
+    private var endpoint: String = Config.Request.defaultEndpoint
     private var query: Query!
-    private var requestMethod: RequestMethod = RequestPreset.defaultRequestMethod
+    private var requestMethod: RequestMethod = Config.Request.defaultRequestMethod
     private var headers: [String : String] = [:]
     private var defaultAuth: [String : String] {
         get {
-            switch AuthConfig.defaultAuthMethod {
+            switch Config.Auth.defaultAuthMethod {
             case .NONE:
                 return [:]
             case .OAUTH:
-                return AuthConfig.OAuth.credentials
+                return Config.Auth.OAuth.credentials
             }
         }
     }
@@ -67,10 +67,10 @@ class RequestBuilder : RequestBuilderProtocol{
     }
     
     private func setDefault() {
-        self.https = RequestPreset.defaultHttps
-        self.baseUrl = RequestPreset.defaultBaseUrl
-        self.endpoint = RequestPreset.defaultEndpoint
-        self.requestMethod = RequestPreset.defaultRequestMethod
+        self.https = Config.Request.defaultHttps
+        self.baseUrl = Config.Request.defaultBaseUrl
+        self.endpoint = Config.Request.defaultEndpoint
+        self.requestMethod = Config.Request.defaultRequestMethod
         self.headers = [:]
     }
 

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 struct APIConstants {
     struct AgeRating {
         static let _base = "age_ratings"
