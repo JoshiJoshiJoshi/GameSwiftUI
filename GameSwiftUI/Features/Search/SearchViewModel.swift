@@ -32,9 +32,11 @@ class SearchViewModel : ObservableObject {
             .compactMap { title in
                 self.searchClerk.searchGames(title: title)
             }
-            .flatMap { games in
+            .map { games in
                 games.mapToLoadingState(placeholder: Game.placeholders)
             }
+            // A new Publisher output will cancel the previous subscriptions <- huge performance boost
+            .switchToLatest()
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] _ in self?.subscriptions.remove(cancellable)
             print("YXC: DONE")
