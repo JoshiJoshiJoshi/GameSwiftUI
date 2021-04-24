@@ -16,4 +16,10 @@ class GameService {
         .replaceError(with: [])
         .eraseToAnyPublisher()
     }
+    
+    private func createUrlRequest(_ query: Query) -> URLRequest {
+        return requestBuilder
+            .setQuery(query)
+            .build()
+    }
 }

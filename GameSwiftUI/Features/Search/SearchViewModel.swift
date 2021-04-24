@@ -20,7 +20,7 @@ class SearchViewModel : ObservableObject {
          gameService: GameService,
          scheduler: DispatchQueue = DispatchQueue(label: "SearchViewModel")
     ) {
-        self.queryBuilder = queryBuilder
+        searchClerk = SearchClerk(queryBuilder: queryBuilder, requestBuilder: requestBuilder)
         self.requestBuilder = requestBuilder
         var cancellable : AnyCancellable!
         cancellable = $searchInput
@@ -31,7 +31,7 @@ class SearchViewModel : ObservableObject {
             // Publishes only elements that don’t match the previous element.
             .removeDuplicates()
             .compactMap { title in
-                self.searchGames(title: title)
+                self.searchClerk.searchGames(title: title)
             }
             .flatMap {
                 gameService.fetchGames(for: $0)
@@ -45,18 +45,12 @@ class SearchViewModel : ObservableObject {
         cancellable.store(in: &subscriptions)
     }
     
-    func searchGames(title: String) -> URLRequest {
-        let query = queryBuilder
-            .search(title)
-            .filter(field: RequestConstants.Game.category)
-            .isEqual(value: 0)
-            .build()
-        
-        let searchUrl = requestBuilder
-            .setQuery(query)
-            .build()
-
-        return searchUrl
+    func reload() -> Void {
+      reloadSubject.send()
+    }
+    
+    enum SearchResult: String{
+      case loaded, empty, error
     }
 }
 
