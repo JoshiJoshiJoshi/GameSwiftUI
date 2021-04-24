@@ -5,9 +5,6 @@
 //  Created by Joshi on 07.04.21.
 //
 
-// Resources
-// Using TabView & NavigationView together https://stackoverflow.com/questions/57329412/navigationview-title-doesnt-appear-when-the-views-are-in-tabview-in-swiftui 
-
 import SwiftUI
 import Combine
 

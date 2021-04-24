@@ -5,9 +5,6 @@
 //  Created by Joshi on 07.04.21.
 //
 
-// Resources:
-// Device identifier: https://www.hackingwithswift.com/example-code/system/how-to-identify-an-ios-device-uniquely-with-identifierforvendor
-
 import Foundation
 
 protocol RequestBuilderProtocol {

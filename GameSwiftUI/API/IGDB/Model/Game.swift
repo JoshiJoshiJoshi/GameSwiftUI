@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
-
 
 struct Game: Codable, Identifiable {
     var id: Int?

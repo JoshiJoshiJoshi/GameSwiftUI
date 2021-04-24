@@ -5,9 +5,6 @@
 //  Created by Joshi on 21.04.21.
 //
 
-// Resources
-// https://developer.apple.com/documentation/combine/subscriber
-
 import Foundation
 import Combine
 
@@ -57,14 +54,8 @@ class SearchViewModel : ObservableObject {
         
         let searchUrl = requestBuilder
             .setQuery(query)
-            .setRequestMethod(.POST)
-            .setBaseUrl(.OFFICIAL)
-            .setEndpoint(RequestEndpoints.games)
             .build()
-        
-        print("Header: \(searchUrl.allHTTPHeaderFields)")
-        print("URL: \(searchUrl.url?.absoluteString)")
-        print("Body: \(String(decoding: searchUrl.httpBody!, as: UTF8.self))")
+
         return searchUrl
     }
 }
