@@ -10,9 +10,7 @@ import Combine
 
 class SearchViewModel : ObservableObject {
     @Published var searchInput = ""
-    @Published var searchResult: SearchResult = .loaded
-    @Published private(set) var loadingState: CollectionLoadingState<[Game]> = .empty
-    private let reloadSubject = PassthroughSubject<Void, Never>()
+    @Published private(set) var loadingState: CollectionLoadingState<[Game]> = .initial
     private var searchClerk: SearchClerkProtocol
     private var subscriptions: Set<AnyCancellable> = []
     

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 public enum CollectionLoadingState<Content> {
-  case loading(placeholder: Content), loaded(content: Content), empty, error(Error)
+  case loading(placeholder: Content), loaded(content: Content), empty, initial, error(Error)
 }
 
 extension Publisher where Output: Collection {
