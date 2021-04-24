@@ -25,7 +25,8 @@ class SearchViewModel : ObservableObject {
     ) {
         self.queryBuilder = queryBuilder
         self.requestBuilder = requestBuilder
-        $searchInput
+        var cancellable : AnyCancellable!
+        cancellable = $searchInput
             // The first emitted value is an empty string, we will skip it to prevent unintended network calls
             .dropFirst(1)
             // Waits 400ms until the user stops typing and then emit the value
@@ -39,8 +40,12 @@ class SearchViewModel : ObservableObject {
                 gameService.fetchGames(for: $0)
             }
             .receive(on: DispatchQueue.main)
-            .assign(to: \.searchResults, on: self)
-            .store(in: &subscriptions)
+            .sink(receiveCompletion: { [weak self] _ in self?.subscriptions.remove(cancellable)
+            }, receiveValue: { games in
+                self.searchResults = games
+            })
+
+        cancellable.store(in: &subscriptions)
     }
     
     func searchGames(title: String) -> URLRequest {
