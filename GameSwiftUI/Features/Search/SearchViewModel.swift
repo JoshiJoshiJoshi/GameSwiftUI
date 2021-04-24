@@ -12,16 +12,12 @@ class SearchViewModel : ObservableObject {
     @Published var searchInput = ""
     @Published var searchResults: [Game] = []
     private var subscriptions: Set<AnyCancellable> = []
-    private var queryBuilder: QueryBuilderProtocol
-    private var requestBuilder: RequestBuilderProtocol
     
     init(queryBuilder: QueryBuilderProtocol,
          requestBuilder: RequestBuilderProtocol,
-         gameService: GameService,
          scheduler: DispatchQueue = DispatchQueue(label: "SearchViewModel")
     ) {
         searchClerk = SearchClerk(queryBuilder: queryBuilder, requestBuilder: requestBuilder)
-        self.requestBuilder = requestBuilder
         var cancellable : AnyCancellable!
         cancellable = $searchInput
             // The first emitted value is an empty string, we will skip it to prevent unintended network calls

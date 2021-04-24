@@ -11,9 +11,9 @@ import SwiftUI
 import SDWebImageSwiftUI
 
 struct SearchView: View {
-    @ObservedObject var vm = SearchViewModel(queryBuilder: QueryBuilder(),
-                                             requestBuilder: RequestBuilder(),
-                                             gameService: GameService()
+    @ObservedObject var viewModel = SearchViewModel(
+        queryBuilder: QueryBuilder(),
+        requestBuilder: RequestBuilder()
     )
     var body: some View {
         VStack {

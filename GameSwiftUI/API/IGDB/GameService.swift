@@ -8,13 +8,24 @@
 import Foundation
 import Combine
 
-class GameService {
-    func fetchGames(for url: URLRequest) -> AnyPublisher<[Game], Never> {
-      return URLSession.shared.dataTaskPublisher(for: url)
-        .map(\.data)
-        .decode(type: [Game].self, decoder: JSONDecoder())
-        .replaceError(with: [])
-        .eraseToAnyPublisher()
+protocol GameServiceProtocol {
+    func fetchGames(for query: Query) -> AnyPublisher<[Game], Error>
+}
+
+class GameService : GameServiceProtocol{
+    private var requestBuilder: RequestBuilderProtocol
+    init(requestBuilder: RequestBuilderProtocol) {
+        self.requestBuilder = requestBuilder
+    }
+    var result: Result<[Game], Error> = .success([])
+    
+    func fetchGames(for query: Query) -> AnyPublisher<[Game], Error> {
+        let urlRequest = createUrlRequest(query)
+        return URLSession.shared.dataTaskPublisher(for: urlRequest)
+            .map(\.data)
+            .decode(type: [Game].self, decoder: JSONDecoder())
+            //        .replaceError(with: [])
+            .eraseToAnyPublisher()
     }
     
     private func createUrlRequest(_ query: Query) -> URLRequest {
