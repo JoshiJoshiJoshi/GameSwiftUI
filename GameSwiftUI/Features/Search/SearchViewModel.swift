@@ -10,7 +10,10 @@ import Combine
 
 class SearchViewModel : ObservableObject {
     @Published var searchInput = ""
-    @Published var searchResults: [Game] = []
+    @Published var searchResult: SearchResult = .loaded
+    @Published private(set) var loadingState: CollectionLoadingState<[Game]> = .empty
+    private let reloadSubject = PassthroughSubject<Void, Never>()
+    private var searchClerk: SearchClerkProtocol
     private var subscriptions: Set<AnyCancellable> = []
     
     init(queryBuilder: QueryBuilderProtocol,
@@ -29,15 +32,15 @@ class SearchViewModel : ObservableObject {
             .compactMap { title in
                 self.searchClerk.searchGames(title: title)
             }
-            .flatMap {
-                gameService.fetchGames(for: $0)
+            .flatMap { games in
+                games.mapToLoadingState(placeholder: Game.placeholders)
             }
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: { [weak self] _ in self?.subscriptions.remove(cancellable)
+            print("YXC: DONE")
             }, receiveValue: { games in
-                self.searchResults = games
+                self.loadingState = games
             })
-
         cancellable.store(in: &subscriptions)
     }
     

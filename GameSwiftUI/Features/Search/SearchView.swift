@@ -16,14 +16,31 @@ struct SearchView: View {
         requestBuilder: RequestBuilder()
     )
     var body: some View {
-        VStack {
-            TextField("Title", text: $vm.searchInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.horizontal)
-            ScrollView {
-                ForEach(vm.searchResults) { game in
-                    ListItem(game: game)
-                }
+        ZStack {
+            VStack {
+                TextField("Title", text: $viewModel.searchInput)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .padding(.horizontal)
+                CollectionLoadingView(
+                    loadingState: viewModel.loadingState,
+                    content: SearchResultView.init(games:),
+                    empty: {
+                        MessageView(
+                            message: "No games found",
+                            imageName: "exclamationmark.bubble"
+                        )
+                    },
+                    error: {
+                        MessageView(
+                            message: $0.localizedDescription,
+                            imageName: "exclamationmark.triangle"
+                        )
+                        .foregroundColor(.red)
+                    }
+                )
+            }
+            .onAppear(){
+                viewModel.reload()
             }
         }
     }
@@ -37,7 +54,7 @@ struct SearchView_Previews: PreviewProvider {
 }
 
 
-struct ListItem: View {
+struct ListItemView: View {
     var game: Game
     var body: some View {
         HStack {
@@ -64,6 +81,7 @@ struct ListItem: View {
                 Spacer()
                 HStack {
                     Image(systemName: "star.fill")
+                        .cornerRadius(5.0)
                     Text("\((game.totalRating?.rounded() ?? 0.0) != 0 ? String(game.totalRating!.rounded()) : "N/A") ")
                 }
             }
@@ -74,3 +92,16 @@ struct ListItem: View {
 }
 
 
+
+struct SearchResultView: View {
+    let games: [Game]
+    @Environment(\.redactionReasons) private var redactionReasons
+    private var isRedacted: Bool { redactionReasons.contains(.placeholder) }
+    var body: some View {
+        ScrollView {
+            ForEach(games) { game in
+                ListItemView(game: game)
+            }
+        }
+    }
+}
