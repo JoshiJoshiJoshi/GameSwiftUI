@@ -5,54 +5,48 @@
 //  Created by Joshi on 20.04.21.
 //
 
-// Resources 
-// WebImages & Placeholders https://sdwebimage.github.io/SDWebImageSwiftUI/
 import SwiftUI
 import SDWebImageSwiftUI
 
 struct SearchView: View {
-    @ObservedObject var viewModel = SearchViewModel(
-        queryBuilder: QueryBuilder(),
-        requestBuilder: RequestBuilder()
-    )
+    @ObservedObject var viewModel: SearchViewModel
+    
     var body: some View {
-        ZStack {
-            VStack {
+        VStack {
+            HStack {
                 TextField("Title", text: $viewModel.searchInput)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
-                    .padding(.horizontal)
-                CollectionLoadingView(
-                    loadingState: viewModel.loadingState,
-                    content: SearchResultView.init(games:),
-                    empty: {
-                        MessageView(
-                            message: "No games found",
-                            imageName: "exclamationmark.bubble"
-                        )
-                    },
-                    error: {
-                        MessageView(
-                            message: $0.localizedDescription,
-                            imageName: "exclamationmark.triangle"
-                        )
-                        .foregroundColor(.red)
-                    }
-                )
+                    .padding(.leading)
+                Image(systemName: "arrow.up.arrow.down.circle")
+                    .font(.title3)
+                    .padding(.trailing)
             }
-            .onAppear(){
-                viewModel.reload()
-            }
+            CollectionLoadingView(
+                loadingState: viewModel.loadingState,
+                content: SearchResultView.init(games:),
+                initial: {
+                    MessageView(
+                        message: "SEARCH FOR GAMES",
+                        imageName: "text.magnifyingglass"
+                    )
+                },
+                empty: {
+                    MessageView(
+                        message: "NO GAMES FOUND",
+                        imageName: "exclamationmark.bubble"
+                    )
+                },
+                error: {
+                    MessageView(
+                        message: $0.localizedDescription,
+                        imageName: "exclamationmark.triangle"
+                    )
+                    .foregroundColor(.red)
+                }
+            )
         }
     }
 }
-
-
-struct SearchView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}
-
 
 struct ListItemView: View {
     var game: Game
@@ -63,7 +57,8 @@ struct ListItemView: View {
                 .placeholder {
                     ZStack {
                         Rectangle().foregroundColor(.gray)
-                        Image(systemName: "photo")
+                            //  Image(systemName: "photo")
+                            .cornerRadius(5.0)
                     }
                 }
                 .transition(.fade(duration: 0.5))
@@ -90,8 +85,6 @@ struct ListItemView: View {
         .padding(.horizontal)
     }
 }
-
-
 
 struct SearchResultView: View {
     let games: [Game]

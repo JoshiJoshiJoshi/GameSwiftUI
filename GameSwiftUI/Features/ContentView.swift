@@ -9,10 +9,12 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
+    @ObservedObject var viewModel: ContentViewModel
+    
     var body: some View {
         TabView {
             NavigationView {
-            NewsView()
+                NewsView(viewModel: viewModel.newsViewModel)
                 .navigationTitle("News")
             }
             .tag(0)
@@ -21,7 +23,7 @@ struct ContentView: View {
                 Text("Home")
             }
             NavigationView {
-                SearchView()
+                SearchView(viewModel: viewModel.searchViewModel)
                 .navigationTitle("Search")
             }
             .tag(1)
@@ -30,11 +32,5 @@ struct ContentView: View {
                 Text("Search")
             }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

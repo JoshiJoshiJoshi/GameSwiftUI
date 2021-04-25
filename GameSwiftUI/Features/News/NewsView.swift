@@ -7,8 +7,11 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+
 struct NewsView: View {
+    @ObservedObject var viewModel: NewsViewModel
     @ObservedObject var newsQuery = NewsQuery()
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
                 ForEach(newsQuery.newsItem) { item in

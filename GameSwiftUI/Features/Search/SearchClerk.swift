@@ -12,14 +12,13 @@ protocol SearchClerkProtocol {
     func searchGames(title: String) -> AnyPublisher<[Game], Error>
 }
 
-public class SearchClerk : SearchClerkProtocol{
+public class SearchClerk : SearchClerkProtocol {
     private var queryBuilder: QueryBuilderProtocol
     private var gameService: GameServiceProtocol
-    
     init(queryBuilder: QueryBuilderProtocol,
-         requestBuilder: RequestBuilderProtocol) {
+         gameService: GameServiceProtocol) {
         self.queryBuilder = queryBuilder
-        self.gameService = GameService(requestBuilder: requestBuilder)
+        self.gameService = gameService
     }
     
     func searchGames(title: String) -> AnyPublisher<[Game], Error> {
