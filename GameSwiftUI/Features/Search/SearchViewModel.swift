@@ -5,62 +5,46 @@
 //  Created by Joshi on 21.04.21.
 //
 
-// Resources
-// https://developer.apple.com/documentation/combine/subscriber
-
 import Foundation
 import Combine
 
-class SearchViewModel : ObservableObject {
+final class SearchViewModel: ObservableObject {
     @Published var searchInput = ""
-    @Published var searchResults: [Game] = []
+    @Published private(set) var loadingState: CollectionLoadingState<[Game]> = .initial
+    private var searchClerk: SearchClerkProtocol
     private var subscriptions: Set<AnyCancellable> = []
-    private var queryBuilder: QueryBuilderProtocol
-    private var requestBuilder: RequestBuilderProtocol
     
-    init(queryBuilder: QueryBuilderProtocol,
-         requestBuilder: RequestBuilderProtocol,
-         gameService: GameService,
+    init(searchClerk: SearchClerkProtocol,
          scheduler: DispatchQueue = DispatchQueue(label: "SearchViewModel")
     ) {
-        self.queryBuilder = queryBuilder
-        self.requestBuilder = requestBuilder
-        $searchInput
+        self.searchClerk = searchClerk
+        var cancellable: AnyCancellable!
+        cancellable = $searchInput
             // The first emitted value is an empty string, we will skip it to prevent unintended network calls
-            .dropFirst(1)
+            .dropFirst(2)
+            .filter {
+                $0.count >= 2
+            }
             // Waits 400ms until the user stops typing and then emit the value
             .debounce(for: .milliseconds(400), scheduler: scheduler)
             // Publishes only elements that don’t match the previous element.
             .removeDuplicates()
             .compactMap { title in
-                self.searchGames(title: title)
+                self.searchClerk.searchGames(title: title)
             }
-            .flatMap {
-                gameService.fetchGames(for: $0)
+            .compactMap { games in
+                games.mapToLoadingState(placeholder: Game.placeholders)
             }
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.searchResults, on: self)
-            .store(in: &subscriptions)
-    }
-    
-    func searchGames(title: String) -> URLRequest {
-        let query = queryBuilder
-            .search(title)
-            .filter(field: RequestConstants.Game.category)
-            .isEqual(value: 0)
-            .build()
-        
-        let searchUrl = requestBuilder
-            .setQuery(query)
-            .setRequestMethod(.POST)
-            .setBaseUrl(.OFFICIAL)
-            .setEndpoint(RequestEndpoints.games)
-            .build()
-        
-        print("Header: \(searchUrl.allHTTPHeaderFields)")
-        print("URL: \(searchUrl.url?.absoluteString)")
-        print("Body: \(String(decoding: searchUrl.httpBody!, as: UTF8.self))")
-        return searchUrl
+            // A new Publisher output will cancel all previous subscriptions <- huge performance boost
+            .switchToLatest()
+            .receive(on: RunLoop.main)
+            .sink(
+                receiveCompletion: {
+                    [weak self] _ in self?.subscriptions.remove(cancellable)
+                }, receiveValue: { games in
+                    self.loadingState = games
+                })
+        cancellable.store(in: &subscriptions)
     }
 }
 

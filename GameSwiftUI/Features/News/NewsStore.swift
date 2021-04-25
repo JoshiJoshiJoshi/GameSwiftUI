@@ -7,8 +7,6 @@
 
 import Foundation
 import Combine
-// Resources
-// https://stackoverflow.com/questions/60622272/how-can-i-read-the-nested-json-data-by-using-swift-combine
 
 class NewsQuery : ObservableObject {
     let url = URL(string:"http://localhost:8055/items/announcements")!

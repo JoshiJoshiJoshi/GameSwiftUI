@@ -43,8 +43,8 @@ struct Config {
         static let defaultAuthMethod: RequestAuthMethod = .OAUTH
         struct OAuth {
             private static let clientId: String = ""
-            private static let bearer: String = ""
-            static let credentials: [String : String] = ["Client-ID" : clientId, "Authorization" : "Bearer \(bearer)"]
+            private static let accessToken: String = ""
+            static let credentials: [String : String] = ["Client-ID" : clientId, "Authorization" : "Bearer \(accessToken)"]
         }
     }
 }
@@ -53,5 +53,4 @@ enum RequestBaseUrl: String {
     case INOFFICIAL = "api.research.sx"
     case OFFICIAL = "api.igdb.com"
 }
-
 // ---------------------------------------- IGDB ---------------------------------------- //

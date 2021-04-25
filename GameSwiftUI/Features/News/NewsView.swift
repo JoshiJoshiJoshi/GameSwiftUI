@@ -7,8 +7,11 @@
 
 import SwiftUI
 import SDWebImageSwiftUI
+
 struct NewsView: View {
+    @ObservedObject var viewModel: NewsViewModel
     @ObservedObject var newsQuery = NewsQuery()
+    
     var body: some View {
         ScrollView(showsIndicators: false) {
                 ForEach(newsQuery.newsItem) { item in
@@ -50,11 +53,5 @@ struct NewsView: View {
                 }
                 .shadow(color: Color.black.opacity(0.2), radius: 10)
             }
-    }
-}
-
-struct NewsView_Previews: PreviewProvider {
-    static var previews: some View {
-        NewsView()
     }
 }

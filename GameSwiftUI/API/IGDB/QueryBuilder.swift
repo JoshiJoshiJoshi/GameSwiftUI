@@ -135,7 +135,7 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func buildSearchQuery() {
-        filter(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
+        _ = filter(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
     }
     
     private func setDefault() {

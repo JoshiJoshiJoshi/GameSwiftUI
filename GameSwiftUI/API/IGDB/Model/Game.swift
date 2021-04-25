@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
-
 
 struct Game: Codable, Identifiable {
     var id: Int?
@@ -20,12 +18,26 @@ struct Game: Codable, Identifiable {
         case totalRating = "total_rating"
         case id, name, storyline, summary, cover
     }
+    
 }
 
 struct Cover: Codable {
     var imageID: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case imageID = "image_id"
+    }
+}
+
+extension Game {
+    static let placeholders: [Self] = (0..<5).map {
+        .init(
+            id: $0,
+            name: "Lorem ipsum dolor sit",
+            storyline: "",
+            summary: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non",
+            cover: Cover(imageID: ""),
+            totalRating: 69
+        )
     }
 }

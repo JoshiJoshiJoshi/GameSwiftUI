@@ -48,13 +48,6 @@ struct RequestEndpoints {
     static let websites = "/\(Config.IGDB.currentApiVersion)/\(APIConstants.Website._base)"
 }
 
-// Resources:
-// Adding Placeholders: https://www.informit.com/articles/article.aspx?p=1914191&seqNum=3
-// Example:
-// static private let base = "<#name#>"
-// static let all = "\(base).*"
-// static let <#name#> = "\(base).<#name#>"
-
 struct RequestConstants {
     struct AgeRating {
         static private let base = (APIConstants.AgeRating._base)

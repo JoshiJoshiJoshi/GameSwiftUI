@@ -5,9 +5,6 @@
 //  Created by Joshi on 07.04.21.
 //
 
-// Resources:
-// Device identifier: https://www.hackingwithswift.com/example-code/system/how-to-identify-an-ios-device-uniquely-with-identifierforvendor
-
 import Foundation
 
 protocol RequestBuilderProtocol {
@@ -23,8 +20,8 @@ class RequestBuilder : RequestBuilderProtocol{
     private var https: Bool = Config.Request.defaultHttps
     private var baseUrl: String = Config.Request.defaultBaseUrl
     private var endpoint: String = Config.Request.defaultEndpoint
-    private var query: Query!
     private var requestMethod: RequestMethod = Config.Request.defaultRequestMethod
+    private var query: Query!
     private var headers: [String : String] = [:]
     private var defaultAuth: [String : String] {
         get {

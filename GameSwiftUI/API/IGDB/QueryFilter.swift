@@ -6,8 +6,6 @@
 //
 
 import Foundation
-// Resources
-// https://api-docs.igdb.com/#filters
 
 protocol QueryFilterProtocol {
     func isEqual(string: String, prefix: Bool, postfix: Bool) -> QueryBuilderProtocol
