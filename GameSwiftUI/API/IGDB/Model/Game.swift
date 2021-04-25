@@ -19,22 +19,25 @@ struct Game: Codable, Identifiable {
         case id, name, storyline, summary, cover
     }
     
-    static let placeholders: [Self] = (0..<5).map {
-        .init(
-            id: $0,
-            name: "Lorem ipsum dolor",
-            storyline: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
-            summary: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ",
-            cover: Cover(imageID: "Lorem ipsum dolor"),
-            totalRating: 100.0
-        )
-    }
 }
 
 struct Cover: Codable {
     var imageID: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case imageID = "image_id"
+    }
+}
+
+extension Game {
+    static let placeholders: [Self] = (0..<5).map {
+        .init(
+            id: $0,
+            name: "Lorem ipsum dolor sit",
+            storyline: "",
+            summary: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non",
+            cover: Cover(imageID: ""),
+            totalRating: 69
+        )
     }
 }

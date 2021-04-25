@@ -14,8 +14,8 @@
             filePath = "GameSwiftUI/Features/News/NewsView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "13"
-            endingLineNumber = "13"
+            startingLineNumber = "16"
+            endingLineNumber = "16"
             landmarkName = "body"
             landmarkType = "24">
             <Locations>
@@ -48,6 +48,133 @@
                   startingLineNumber = "16"
                   endingLineNumber = "16"
                   offsetFromSymbolStart = "438">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FDEEA508-5B2C-4D06-AE24-8040D22C9D10"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GameSwiftUI/API/IGDB/GameService.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "GameService"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "670E1E60-C561-49FC-B113-0D2D46A46544"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GameSwiftUI/Features/Search/SearchViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "42"
+            endingLineNumber = "42"
+            landmarkName = "init(searchClerk:scheduler:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "670E1E60-C561-49FC-B113-0D2D46A46544 - 4367ca91981e60ba"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GameSwiftUI.SearchViewModel.init(searchClerk: GameSwiftUI.SearchClerkProtocol, scheduler: __C.OS_dispatch_queue) -&gt; GameSwiftUI.SearchViewModel"
+                  moduleName = "GameSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Joshi/Documents/Git/GameSwiftUI/GameSwiftUI/Features/Search/SearchViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "3048">
+               </Location>
+               <Location
+                  uuid = "670E1E60-C561-49FC-B113-0D2D46A46544 - c0af9e19b4469c13"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (Combine.Subscribers.Completion&lt;Swift.Never&gt;) -&gt; () in GameSwiftUI.SearchViewModel.init(searchClerk: GameSwiftUI.SearchClerkProtocol, scheduler: __C.OS_dispatch_queue) -&gt; GameSwiftUI.SearchViewModel"
+                  moduleName = "GameSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Joshi/Documents/Git/GameSwiftUI/GameSwiftUI/Features/Search/SearchViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "40"
+                  endingLineNumber = "40"
+                  offsetFromSymbolStart = "112">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "515176B7-0FB6-460C-9AEB-73C6339E73E1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "GameSwiftUI/Features/Search/SearchViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "44"
+            endingLineNumber = "44"
+            landmarkName = "init(searchClerk:scheduler:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "515176B7-0FB6-460C-9AEB-73C6339E73E1 - 4367ca91981e60f4"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "GameSwiftUI.SearchViewModel.init(searchClerk: GameSwiftUI.SearchClerkProtocol, scheduler: __C.OS_dispatch_queue) -&gt; GameSwiftUI.SearchViewModel"
+                  moduleName = "GameSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Joshi/Documents/Git/GameSwiftUI/GameSwiftUI/Features/Search/SearchViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "3441">
+               </Location>
+               <Location
+                  uuid = "515176B7-0FB6-460C-9AEB-73C6339E73E1 - c0af9e19b4469c5d"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #3 (Combine.Subscribers.Completion&lt;Swift.Never&gt;) -&gt; () in GameSwiftUI.SearchViewModel.init(searchClerk: GameSwiftUI.SearchClerkProtocol, scheduler: __C.OS_dispatch_queue) -&gt; GameSwiftUI.SearchViewModel"
+                  moduleName = "GameSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Joshi/Documents/Git/GameSwiftUI/GameSwiftUI/Features/Search/SearchViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "42"
+                  endingLineNumber = "42"
+                  offsetFromSymbolStart = "700">
+               </Location>
+               <Location
+                  uuid = "515176B7-0FB6-460C-9AEB-73C6339E73E1 - f3b752584d8b3afe"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #4 (GameSwiftUI.CollectionLoadingState&lt;Swift.Array&lt;GameSwiftUI.Game&gt;&gt;) -&gt; () in GameSwiftUI.SearchViewModel.init(searchClerk: GameSwiftUI.SearchClerkProtocol, scheduler: __C.OS_dispatch_queue) -&gt; GameSwiftUI.SearchViewModel"
+                  moduleName = "GameSwiftUI"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Joshi/Documents/Git/GameSwiftUI/GameSwiftUI/Features/Search/SearchViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "43"
+                  endingLineNumber = "43"
+                  offsetFromSymbolStart = "52">
                </Location>
             </Locations>
          </BreakpointContent>

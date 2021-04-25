@@ -17,14 +17,12 @@ class GameService : GameServiceProtocol{
     init(requestBuilder: RequestBuilderProtocol) {
         self.requestBuilder = requestBuilder
     }
-    var result: Result<[Game], Error> = .success([])
-    
+
     func fetchGames(for query: Query) -> AnyPublisher<[Game], Error> {
         let urlRequest = createUrlRequest(query)
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .map(\.data)
             .decode(type: [Game].self, decoder: JSONDecoder())
-            //        .replaceError(with: [])
             .eraseToAnyPublisher()
     }
     

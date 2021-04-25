@@ -43,13 +43,5 @@ class SearchViewModel : ObservableObject {
             })
         cancellable.store(in: &subscriptions)
     }
-    
-    func reload() -> Void {
-      reloadSubject.send()
-    }
-    
-    enum SearchResult: String{
-      case loaded, empty, error
-    }
 }
 

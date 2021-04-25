@@ -47,7 +47,7 @@ public struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorV
         case let .error(error):
             makeError(error)
                 .transition(fade)
-
+            
         }
     }
 }

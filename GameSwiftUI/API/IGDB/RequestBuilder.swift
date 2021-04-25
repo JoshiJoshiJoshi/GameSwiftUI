@@ -20,8 +20,8 @@ class RequestBuilder : RequestBuilderProtocol{
     private var https: Bool = Config.Request.defaultHttps
     private var baseUrl: String = Config.Request.defaultBaseUrl
     private var endpoint: String = Config.Request.defaultEndpoint
-    private var query: Query!
     private var requestMethod: RequestMethod = Config.Request.defaultRequestMethod
+    private var query: Query!
     private var headers: [String : String] = [:]
     private var defaultAuth: [String : String] {
         get {

@@ -28,8 +28,8 @@ public class SearchClerk : SearchClerkProtocol{
             .filter(field: RequestConstants.Game.category)
             .isEqual(value: 0)
             .build()
-
+        
         return gameService.fetchGames(for: query)
     }
-
+    
 }

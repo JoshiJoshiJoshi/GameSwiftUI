@@ -16,7 +16,7 @@ struct DataElement: Codable, Identifiable {
     var dateCreated: String
     var dateUpdated: String?
     var datePublished, title, description, cover: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case dateCreated = "date_created"
