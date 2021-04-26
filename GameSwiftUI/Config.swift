@@ -32,7 +32,7 @@ struct Config {
         // IGDB OAuth credentials are required for 'OFFICIAL'
         static let defaultBaseUrl: String = RequestBaseUrl.INOFFICIAL.rawValue
         static let defaultEndpoint: String = RequestEndpoints.games
-        static let defaultRequestMethod: RequestMethod = .GET
+        static let defaultHTTPMethod: HTTPMethod = .GET
     }
     
     struct IGDB {
