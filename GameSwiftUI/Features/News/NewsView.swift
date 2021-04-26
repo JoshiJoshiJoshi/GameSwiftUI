@@ -27,7 +27,7 @@ struct NewsView: View {
                 },
                 empty: {
                     MessageView(
-                        message: "NO NEW NEWS",
+                        message: "NO NEWS PUBLISHED YET",
                         imageName: "exclamationmark.bubble"
                     )
                 },
