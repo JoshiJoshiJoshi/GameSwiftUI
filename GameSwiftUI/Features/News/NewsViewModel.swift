@@ -6,7 +6,34 @@
 //
 
 import Foundation
+import Combine
 
 final class NewsViewModel: ObservableObject {
+    @Published private(set) var loadingState: CollectionLoadingState<[News]> = .empty
+    //    @Published private(set) var loadingState: CollectionLoadingState<[News]> = .loading(placeholder: News.placeholders)
+    private var subscriptions: Set<AnyCancellable> = []
+    private var cancellable: AnyCancellable?
+    private var newsClerk: NewsClerkProtocol
     
+    init(newsClerk: NewsClerkProtocol) {
+        self.newsClerk = newsClerk
+        self.getNews()
+    }
+    
+    // MARK: - WIP
+    func getNews() {
+        cancellable = newsClerk.getNews()
+            .mapToLoadingState(placeholder: News.placeholders)
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { _ in
+                
+            }, receiveValue: { loadingStateGames in
+                self.loadingState = loadingStateGames
+            })
+    }
+    
+    // MARK: - WIP
+    func getMediaUrl(news: News) -> URL {
+        return URL(string: "http://localhost:8055/assets/\(news.cover)")!
+    }
 }

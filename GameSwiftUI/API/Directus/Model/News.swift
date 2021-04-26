@@ -10,6 +10,7 @@ import Foundation
 struct Announcement: Codable {
     var data: [DataElement]
 }
+typealias News = DataElement
 
 struct DataElement: Codable, Identifiable {
     var id: Int
@@ -27,3 +28,16 @@ struct DataElement: Codable, Identifiable {
         case cover
     }
 }
+
+extension News {
+    static let placeholders: [Self] = (0..<3).map {
+        .init(id: $0,
+              dateCreated: "",
+              dateUpdated: "",
+              datePublished: "",
+              title: "Lorem ipsum dolor ",
+              description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non Lorem ipsum dolor sit amet, consetetur sadipscing elitr, Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam non",
+              cover: "")
+    }
+}
+
