@@ -11,7 +11,7 @@ protocol RequestBuilderProtocol {
     func setBaseUrl(_ url: RequestBaseUrl) -> RequestBuilderProtocol
     func setEndpoint(_ string: String) -> RequestBuilderProtocol
     func setQuery(_ query: Query) -> RequestBuilderProtocol
-    func setRequestMethod(_ method: RequestMethod) -> RequestBuilderProtocol
+    func setHTTPMethod(_ method: HTTPMethod) -> RequestBuilderProtocol
     func addHeader(_ key: String, _ value: String) -> RequestBuilderProtocol
     func build() -> URLRequest
 }
@@ -20,7 +20,7 @@ class RequestBuilder : RequestBuilderProtocol{
     private var https: Bool = Config.Request.defaultHttps
     private var baseUrl: String = Config.Request.defaultBaseUrl
     private var endpoint: String = Config.Request.defaultEndpoint
-    private var requestMethod: RequestMethod = Config.Request.defaultRequestMethod
+    private var httpMethod: HTTPMethod = Config.Request.defaultHTTPMethod
     private var query: Query!
     private var headers: [String : String] = [:]
     private var defaultAuth: [String : String] {
@@ -54,8 +54,8 @@ class RequestBuilder : RequestBuilderProtocol{
         return self
     }
     
-    func setRequestMethod(_ method: RequestMethod) -> RequestBuilderProtocol {
-        self.requestMethod = method
+    func setHTTPMethod(_ method: HTTPMethod) -> RequestBuilderProtocol {
+        self.httpMethod = method
         return self
     }
     func addHeader(_ key: String, _ value: String) -> RequestBuilderProtocol {
@@ -67,7 +67,7 @@ class RequestBuilder : RequestBuilderProtocol{
         self.https = Config.Request.defaultHttps
         self.baseUrl = Config.Request.defaultBaseUrl
         self.endpoint = Config.Request.defaultEndpoint
-        self.requestMethod = Config.Request.defaultRequestMethod
+        self.httpMethod = Config.Request.defaultHTTPMethod
         self.headers = [:]
     }
 
@@ -78,7 +78,7 @@ class RequestBuilder : RequestBuilderProtocol{
         urlComponents.host = baseUrl
         urlComponents.path = endpoint
 
-        switch requestMethod {
+        switch httpMethod {
         case .GET:
             urlComponents.queryItems = query.queryForGET
             urlRequest = URLRequest(url: urlComponents.url!)
@@ -89,7 +89,7 @@ class RequestBuilder : RequestBuilderProtocol{
             urlRequest.httpBody = query.queryForPOST.data(using: .utf8)
             break;
         }
-        urlRequest.httpMethod = requestMethod.rawValue
+        urlRequest.httpMethod = httpMethod.rawValue
         
         // Meta Data
         urlRequest.setValue("iOS", forHTTPHeaderField: "OS-Name")
@@ -110,7 +110,7 @@ class RequestBuilder : RequestBuilderProtocol{
     }
 }
 
-enum RequestMethod: String {
+enum HTTPMethod: String {
     case GET = "GET"
     case POST = "POST"
 }
