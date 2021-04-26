@@ -10,7 +10,6 @@ import SDWebImageSwiftUI
 
 struct SearchView: View {
     @ObservedObject var viewModel: SearchViewModel
-    
     var body: some View {
         VStack {
             HStack {
@@ -20,10 +19,16 @@ struct SearchView: View {
                 Image(systemName: "arrow.up.arrow.down.circle")
                     .font(.title3)
                     .padding(.trailing)
+                    .onTapGesture {
+                        // MARK: - WIP
+                        viewModel.sortList()
+                    }
             }
             CollectionLoadingView(
                 loadingState: viewModel.loadingState,
-                content: SearchResultView.init(games:),
+                content: { games in
+                    SearchResultView.init(viewModel: viewModel, games: games)
+                },
                 initial: {
                     MessageView(
                         message: "SEARCH FOR GAMES",
@@ -36,9 +41,9 @@ struct SearchView: View {
                         imageName: "exclamationmark.bubble"
                     )
                 },
-                error: {
+                error: { error in
                     MessageView(
-                        message: $0.localizedDescription,
+                        message: error.localizedDescription,
                         imageName: "exclamationmark.triangle"
                     )
                     .foregroundColor(.red)
@@ -48,16 +53,17 @@ struct SearchView: View {
     }
 }
 
-struct ListItemView: View {
+struct SearchListItemView: View {
+    @ObservedObject var viewModel: SearchViewModel
     var game: Game
+    
     var body: some View {
         HStack {
-            WebImage(url: URL(string: "https://images.igdb.com/igdb/image/upload/t_cover_big/\(game.cover?.imageID ?? "").jpg"))
+            WebImage(url: viewModel.getImageUrl(game: game, imageSize: .coverBig))
                 .resizable()
                 .placeholder {
                     ZStack {
                         Rectangle().foregroundColor(.gray)
-                            //  Image(systemName: "photo")
                             .cornerRadius(5.0)
                     }
                 }
@@ -67,7 +73,8 @@ struct ListItemView: View {
                 .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/, width: 2)
                 .cornerRadius(5)
             VStack(alignment: .leading) {
-                Text(game.name ?? "nil")
+                // MARK: - WIP
+                Text("\(game.name ?? "nil") (\(viewModel.formatTimestampToYear(game: game)))")
                     .font(.headline)
                     .lineLimit(1)
                 Text(game.summary ?? "No description available.")
@@ -82,19 +89,28 @@ struct ListItemView: View {
             }
             Spacer()
         }
+        .frame(height: 121)
         .padding(.horizontal)
     }
 }
 
 struct SearchResultView: View {
+    @ObservedObject var viewModel: SearchViewModel
     let games: [Game]
-    @Environment(\.redactionReasons) private var redactionReasons
-    private var isRedacted: Bool { redactionReasons.contains(.placeholder) }
+    
     var body: some View {
         ScrollView {
             ForEach(games) { game in
-                ListItemView(game: game)
+                SearchListItemView(viewModel: viewModel, game: game)
             }
         }
+    }
+}
+
+struct SearchView_Previews: PreviewProvider {
+    static var previews: some View {
+        let gameService = GameService(requestBuilder: RequestBuilder())
+        let queryBuilder = QueryBuilder()
+        SearchView(viewModel: SearchViewModel(searchClerk: SearchClerk(queryBuilder: queryBuilder, gameService: gameService)))
     }
 }

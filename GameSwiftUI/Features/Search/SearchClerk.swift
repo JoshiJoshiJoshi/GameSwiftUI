@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol SearchClerkProtocol {
-    func searchGames(title: String) -> AnyPublisher<[Game], Error>
+    func searchGames(title: String, sortOrder: SortOrder) -> AnyPublisher<[Game], Error>
 }
 
 public class SearchClerk : SearchClerkProtocol {
@@ -21,14 +21,21 @@ public class SearchClerk : SearchClerkProtocol {
         self.gameService = gameService
     }
     
-    func searchGames(title: String) -> AnyPublisher<[Game], Error> {
+    func searchGames(title: String, sortOrder: SortOrder) -> AnyPublisher<[Game], Error> {
         let query = queryBuilder
             .search(title)
-            .filter(field: RequestConstants.Game.category)
+            .offset(0)
+            .where(field: RequestConstants.Game.category)
             .isEqual(value: 0)
+            .where(field: RequestConstants.Game.versionParent)
+            .isNull()
+            .where(field: RequestConstants.Game.parentGame)
+            .isNull()
+            .where(field: RequestConstants.Game.versionTitle)
+            .isNull()
+            .sort(field: RequestConstants.Game.firstReleaseDate, order: sortOrder)
             .build()
         
-        return gameService.fetchGames(for: query)
+        return gameService.fetchGames(query: query)
     }
-    
 }
