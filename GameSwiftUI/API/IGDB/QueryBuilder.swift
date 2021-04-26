@@ -15,7 +15,7 @@ protocol QueryBuilderProtocol {
     func exclude(_ field: String...) -> QueryBuilderProtocol
     func exclude(_ fields: [String]) -> QueryBuilderProtocol
     func sort(field: String, order: SortOrder) -> QueryBuilderProtocol
-    func filter(field: String) -> QueryFilterProtocol
+    func `where`(field: String) -> QueryFilterProtocol
     func search(_ query: String) -> QueryBuilderProtocol
     func build() -> Query
 }
@@ -25,7 +25,7 @@ class QueryBuilder : QueryBuilderProtocol {
     private var offset: Int = Config.Query.defaultOffset
     private var includedFields: Set<String> = Set(Config.Query.defaultIncludedFields)
     private var excludedFields: Set<String> = Set(Config.Query.defaultExcludedFields)
-    private var filter: [QueryFilter] = Config.Query.defaultFilter
+    private var `where`: [QueryFilter] = Config.Query.defaultFilter
     private var search: String = Config.Query.defaultSearch
     private var sort: String = Config.Query.defaultSortField
     private var sortOrder: SortOrder = Config.Query.defaultSortOrder
@@ -114,15 +114,16 @@ class QueryBuilder : QueryBuilderProtocol {
         queryForPOST += "sort " + "\(sort) \(sortOrder.rawValue)" + ";"
     }
     
-    func filter(field: String) -> QueryFilterProtocol {
+    ///
+    func `where`(field: String) -> QueryFilterProtocol {
         let queryFilter = QueryFilter(field: field, queryBuilder: self)
-        filter.append(queryFilter)
+        `where`.append(queryFilter)
         return queryFilter
     }
     
-    private func buildFilterQuery() {
-        var temp : [String] = []
-        filter.forEach { item in
+    private func buildWhereQuery() {
+        var temp: [String] = []
+        `where`.forEach { item in
             queryForGET.append(URLQueryItem(name: "filter\(item.queryForGET.0)", value: "\(item.queryForGET.1)"))
             temp.append(item.queryForPOST)
         }
@@ -135,7 +136,7 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func buildSearchQuery() {
-        _ = filter(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
+        _ = `where`(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
     }
     
     private func setDefault() {
@@ -146,7 +147,7 @@ class QueryBuilder : QueryBuilderProtocol {
         search = Config.Query.defaultSearch
         sort = Config.Query.defaultSortField
         sortOrder = Config.Query.defaultSortOrder
-        filter = Config.Query.defaultFilter
+        `where` = Config.Query.defaultFilter
     
         queryForGET = []
         queryForPOST = ""
@@ -159,7 +160,7 @@ class QueryBuilder : QueryBuilderProtocol {
             if (offset != 0) { try buildOffsetQuery() }
             if (!excludedFields.isEmpty) { buildExcludeQuery() }
             if (!search.isEmpty) { buildSearchQuery() }
-            if (!filter.isEmpty) { buildFilterQuery() }
+            if (!`where`.isEmpty) { buildWhereQuery() }
             if (!sort.isEmpty) { buildSortQuery() }
         }
         catch QueryError.invalidInput(let msg){ fatalError(msg) }
