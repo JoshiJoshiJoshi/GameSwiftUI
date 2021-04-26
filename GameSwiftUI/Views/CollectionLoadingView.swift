@@ -8,7 +8,7 @@
 import SwiftUI
 
 public struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorView: View>: View {
-    private let fade = AnyTransition.opacity.animation(Animation.linear(duration: 0.5))
+    private let fade = AnyTransition.opacity.animation(Animation.easeInOut(duration: 0.2))
     private let state: CollectionLoadingState<[Item]>
     private let makeContent: ([Item]) -> Content
     private let makeInitial: () -> EmptyView

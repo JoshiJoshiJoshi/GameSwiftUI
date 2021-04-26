@@ -93,3 +93,22 @@ class QueryFilter : QueryFilterProtocol {
         return queryBuilder
     }
 }
+
+// Permits usage of default parameters.
+extension QueryFilterProtocol {
+    func isEqual(
+        string: String,
+        prefix: Bool = Bool(),
+        postfix: Bool = Bool()
+    ) -> QueryBuilderProtocol {
+        return isEqual(string: string, prefix: prefix, postfix: postfix)
+    }
+    
+    func isNotEqual(
+        string: String,
+        prefix: Bool = Bool(),
+        postfix: Bool = Bool()
+    ) -> QueryBuilderProtocol {
+        return isNotEqual(string: string, prefix: prefix, postfix: postfix)
+    }
+}

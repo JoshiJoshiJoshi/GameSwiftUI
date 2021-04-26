@@ -9,16 +9,16 @@ import Foundation
 import Combine
 
 protocol GameServiceProtocol {
-    func fetchGames(for query: Query) -> AnyPublisher<[Game], Error>
+    func fetchGames(query: Query) -> AnyPublisher<[Game], Error>
 }
 
-class GameService : GameServiceProtocol{
+class GameService : GameServiceProtocol {
     private var requestBuilder: RequestBuilderProtocol
     init(requestBuilder: RequestBuilderProtocol) {
         self.requestBuilder = requestBuilder
     }
-
-    func fetchGames(for query: Query) -> AnyPublisher<[Game], Error> {
+    
+    func fetchGames(query: Query) -> AnyPublisher<[Game], Error> {
         let urlRequest = createUrlRequest(query)
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .map(\.data)
