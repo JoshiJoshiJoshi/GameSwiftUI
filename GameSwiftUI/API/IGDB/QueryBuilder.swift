@@ -32,6 +32,7 @@ class QueryBuilder : QueryBuilderProtocol {
     private var queryForGET: [URLQueryItem] = []
     private var queryForPOST: String = ""
     
+    /// Sets the maximum number of entries to return per call.
     func limit(_ value: Int) -> QueryBuilderProtocol {
         limit = value
         return self
@@ -48,6 +49,7 @@ class QueryBuilder : QueryBuilderProtocol {
         queryForPOST += "limit " + String(limit) + ";"
     }
     
+    /// By specifying offset, you retrieve entries starting with the offset value.
     func offset(_ value: Int) -> QueryBuilderProtocol {
         self.offset = value
         return self
@@ -61,6 +63,9 @@ class QueryBuilder : QueryBuilderProtocol {
         queryForPOST += "offset " + String(offset) + ";"
     }
     
+    /// Will return
+    /// - Parameters:
+    ///     - field: It's best to increment it with the specified limit value each time.
     func include(_ field: String...) -> QueryBuilderProtocol {
         field.forEach { item in
             includedFields.insert(item)
@@ -103,6 +108,7 @@ class QueryBuilder : QueryBuilderProtocol {
         queryForPOST += "exclude " + excludedFields.joined(separator: ",") + ";"
     }
     
+    /// Retrieve the entries sorted by the parameters specified.
     func sort(field: String, order: SortOrder) -> QueryBuilderProtocol {
         self.sort = field
         self.sortOrder = order
@@ -130,6 +136,7 @@ class QueryBuilder : QueryBuilderProtocol {
         queryForPOST += "where \(temp.joined(separator: "&"));"
     }
     
+    /// 
     func search(_ query: String) -> QueryBuilderProtocol {
         self.search = query
         return self
@@ -181,10 +188,10 @@ fileprivate enum QueryError: Error {
 }
 
 class Query {
-    let queryForGET : [URLQueryItem]
-    let queryForPOST : String
+    let queryForGET: [URLQueryItem]
+    let queryForPOST: String
     
-    init(queryForGET: [URLQueryItem], queryForPOST : String) {
+    init(queryForGET: [URLQueryItem], queryForPOST: String) {
         self.queryForGET = queryForGET
         self.queryForPOST = queryForPOST
     }

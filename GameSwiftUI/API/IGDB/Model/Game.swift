@@ -14,8 +14,10 @@ struct Game: Codable, Identifiable {
     var summary: String?
     var cover: Cover?
     var totalRating: Double?
+    var firstReleaseDate: Int?
     enum CodingKeys: String, CodingKey {
         case totalRating = "total_rating"
+        case firstReleaseDate = "first_release_date"
         case id, name, storyline, summary, cover
     }
     

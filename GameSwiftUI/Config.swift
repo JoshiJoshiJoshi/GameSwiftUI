@@ -15,7 +15,8 @@ struct Config {
                                                       RequestConstants.Game.summary,
                                                       RequestConstants.Game.storyline,
                                                       RequestConstants.Game.firstReleaseDate,
-                                                      RequestConstants.Game.totalRating]
+                                                      RequestConstants.Game.totalRating,
+                                                      RequestConstants.Game.firstReleaseDate]
         static let defaultLimit: Int = 100
         static let defaultOffset: Int = 0
         static let defaultExcludedFields: [String] = []
