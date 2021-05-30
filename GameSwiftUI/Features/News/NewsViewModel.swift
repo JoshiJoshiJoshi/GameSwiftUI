@@ -9,8 +9,8 @@ import Foundation
 import Combine
 
 final class NewsViewModel: ObservableObject {
-    @Published private(set) var loadingState: CollectionLoadingState<[News]> = .empty
-    //    @Published private(set) var loadingState: CollectionLoadingState<[News]> = .loading(placeholder: News.placeholders)
+    @Published private(set) var loadingState: CollectionLoadingState<[News]> = .initial
+//        @Published private(set) var loadingState: CollectionLoadingState<[News]> = .loading(placeholder: News.placeholders)
     private var subscriptions: Set<AnyCancellable> = []
     private var cancellable: AnyCancellable?
     private var newsClerk: NewsClerkProtocol
@@ -25,10 +25,10 @@ final class NewsViewModel: ObservableObject {
         cancellable = newsClerk.getNews()
             .mapToLoadingState(placeholder: News.placeholders)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { _ in
-                
-            }, receiveValue: { loadingStateGames in
-                self.loadingState = loadingStateGames
+            .sink(receiveCompletion: {
+                [weak self] _ in self?.subscriptions.remove((self?.cancellable)!)
+            }, receiveValue: { loadingStateNews in
+                self.loadingState = loadingStateNews
             })
     }
     

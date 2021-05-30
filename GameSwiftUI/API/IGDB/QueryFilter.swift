@@ -94,7 +94,6 @@ class QueryFilter : QueryFilterProtocol {
     }
 }
 
-// Permits usage of default parameters.
 extension QueryFilterProtocol {
     func isEqual(
         string: String,

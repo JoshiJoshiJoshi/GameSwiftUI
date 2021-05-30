@@ -14,7 +14,7 @@ protocol QueryBuilderProtocol {
     func include(_ fields: [String]) -> QueryBuilderProtocol
     func exclude(_ field: String...) -> QueryBuilderProtocol
     func exclude(_ fields: [String]) -> QueryBuilderProtocol
-    func sort(field: String, order: SortOrder) -> QueryBuilderProtocol
+    func sort(field: SortByField, order: SortOrder) -> QueryBuilderProtocol
     func `where`(field: String) -> QueryFilterProtocol
     func search(_ query: String) -> QueryBuilderProtocol
     func build() -> Query
@@ -27,7 +27,7 @@ class QueryBuilder : QueryBuilderProtocol {
     private var excludedFields: Set<String> = Set(Config.Query.defaultExcludedFields)
     private var `where`: [QueryFilter] = Config.Query.defaultFilter
     private var search: String = Config.Query.defaultSearch
-    private var sort: String = Config.Query.defaultSortField
+    private var sort: SortByField = Config.Query.defaultSortByField
     private var sortOrder: SortOrder = Config.Query.defaultSortOrder
     private var queryForGET: [URLQueryItem] = []
     private var queryForPOST: String = ""
@@ -104,14 +104,14 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
 
-    func sort(field: String, order: SortOrder) -> QueryBuilderProtocol {
+    func sort(field: SortByField, order: SortOrder) -> QueryBuilderProtocol {
         self.sort = field
         self.sortOrder = order
         return self
     }
     
     private func buildSortQuery() {
-        queryForGET.append(URLQueryItem(name: "order", value: "\(sort):\(sortOrder.rawValue)"))
+        queryForGET.append(URLQueryItem(name: "order", value: "\(sort.rawValue):\(sortOrder.rawValue)"))
         queryForPOST += "sort " + "\(sort) \(sortOrder.rawValue)" + ";"
     }
     
@@ -136,7 +136,7 @@ class QueryBuilder : QueryBuilderProtocol {
     }
     
     private func buildSearchQuery() {
-        _ = `where`(field: RequestConstants.Game.name).isEqual(string: search, prefix: true, postfix: false)
+        _ = `where`(field: IGDBField.Game.name).isEqual(string: search, prefix: true, postfix: false)
     }
     
     private func setDefault() {
@@ -145,7 +145,7 @@ class QueryBuilder : QueryBuilderProtocol {
         includedFields = Set(Config.Query.defaultIncludedFields)
         excludedFields = Set(Config.Query.defaultExcludedFields)
         search = Config.Query.defaultSearch
-        sort = Config.Query.defaultSortField
+        sort = Config.Query.defaultSortByField
         sortOrder = Config.Query.defaultSortOrder
         `where` = Config.Query.defaultFilter
     
@@ -155,13 +155,13 @@ class QueryBuilder : QueryBuilderProtocol {
     
     func build() -> Query {
         do {
+            buildSortQuery()
             try buildIncludeQuery()
             try buildLimitQuery()
             if (offset != 0) { try buildOffsetQuery() }
             if (!excludedFields.isEmpty) { buildExcludeQuery() }
             if (!search.isEmpty) { buildSearchQuery() }
             if (!`where`.isEmpty) { buildWhereQuery() }
-            if (!sort.isEmpty) { buildSortQuery() }
         }
         catch QueryError.invalidInput(let msg){ fatalError(msg) }
         catch { fatalError("Unknown error occurred.") }
@@ -171,9 +171,16 @@ class QueryBuilder : QueryBuilderProtocol {
         return query
     }
 }
-
+enum SortByField: String {
+    case gameId = "id"
+    case totalRating = "total_rating"
+    case firstReleaseDate = "first_release_date"
+    case name = "name"
+    case hypes = "hypes"
+}
 enum SortOrder: String {
-    case ASCENDING = "asc", DESCENDING = "desc"
+    case ascending = "asc"
+    case descending = "desc"
 }
 
 fileprivate enum QueryError: Error {

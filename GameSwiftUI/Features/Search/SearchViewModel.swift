@@ -9,12 +9,14 @@ import Foundation
 import Combine
 
 final class SearchViewModel: ObservableObject {
+    var gameService = GameService(requestBuilder: RequestBuilder())
     @Published var searchInput = ""
     @Published private(set) var loadingState: CollectionLoadingState<[Game]> = .initial
     private var searchClerk: SearchClerkProtocol
     private var subscriptions: Set<AnyCancellable> = []
     private var cancellable: AnyCancellable!
     // MARK: - WIP
+    private var sortByField: SortByField = Config.Query.defaultSortByField
     private var sortOrder: SortOrder = Config.Query.defaultSortOrder
     init(searchClerk: SearchClerkProtocol,
          scheduler: DispatchQueue = DispatchQueue(label: "SearchViewModel")
@@ -31,7 +33,7 @@ final class SearchViewModel: ObservableObject {
             // Publishes only elements that don’t match the previous element.
             .removeDuplicates()
             .compactMap { title in
-                self.searchClerk.searchGames(title: title, sortOrder: self.sortOrder)
+                self.searchClerk.searchGames(title: title, sortByField: self.sortByField, sortOrder: self.sortOrder, offset: 0)
             }
             .compactMap { games in
                 // [Game] -> CollectionLoadingState<[Game]>
@@ -41,82 +43,106 @@ final class SearchViewModel: ObservableObject {
             .switchToLatest()
             .receive(on: RunLoop.main)
             .sink(
-                receiveCompletion: {
-                    [weak self] _ in self?.subscriptions.remove((self?.cancellable)!)
+                receiveCompletion: { [weak self] _ in self?.subscriptions.remove((self?.cancellable)!)
                 }, receiveValue: { loadingStateGames in
                     self.loadingState = loadingStateGames
+                    self.sort()
                 })
         cancellable.store(in: &subscriptions)
     }
     
     // MARK: - WIP
-    func getImageUrl(game: Game, imageSize: IGDBImageSize) -> URL {
-        let imageID = game.cover?.imageID ?? ""
-        
-        return !imageID.isEmpty ? URL(string: "https://images.igdb.com/igdb/image/upload/t_\(imageSize.rawValue)/\(imageID).jpg")! : URL(fileURLWithPath: "cover.jpg")
+    func getImageUrl(game: Game, imageSize: IGDBImageSize, retina: Bool = false) -> URL {
+        return IGDBImage.shared.createImageUrl(game: game, imageSize: imageSize, retina: retina) ?? Bundle.main.url(forResource: "not-found", withExtension: "png")!
     }
     
-    // MARK: - WIP
-    func formatTimestampToYear(game: Game) -> String {
-        let unixTimestamp = game.firstReleaseDate ?? 0
-        if unixTimestamp == 0 { return "N/A"}
-        let formatter = DateFormatter()
-        let date = Date(timeIntervalSince1970: TimeInterval(game.firstReleaseDate!))
-        formatter.dateFormat = "YYYY"
-        return formatter.string(from: date)
-    }
-    
+
     // MARK: - WIP
     func sort() {
         guard case .loaded(let games) = loadingState else {
             return
         }
-        var newGames: [Game]
+        var sortedGames: [Game]
+        
         switch sortOrder {
-        case .ASCENDING:
-            newGames = games.sorted { (x,y) in
-                x.firstReleaseDate ?? 0 < y.firstReleaseDate ?? 0
+        case .ascending:
+            switch sortByField {
+            case .gameId:
+                sortedGames = games.sorted { (x,y) in
+                    x.id < y.id
+                }
+                break
+            case .totalRating:
+                sortedGames = games.sorted { (x,y) in
+                    x.totalRating ?? 0 < y.totalRating ?? 0
+                }
+                break
+            case .firstReleaseDate:
+                sortedGames = games.sorted { (x,y) in
+                    x.firstReleaseDate ?? 0 < y.firstReleaseDate ?? 0
+                }
+                break
+            case .name:
+                sortedGames = games.sorted { (x,y) in
+                    x.name < y.name
+                }
+                break
+            case .hypes:
+                sortedGames = games.sorted { (x,y) in
+                    x.name < y.name
+                }
+                break
             }
-            break
-        case .DESCENDING:
-            newGames = games.sorted { (x,y) in
-                x.firstReleaseDate ?? 0 > y.firstReleaseDate ?? 0
+        case .descending:
+            switch sortByField {
+            case .gameId:
+                sortedGames = games.sorted { (x,y) in
+                    x.id > y.id
+                }
+                break
+            case .totalRating:
+                sortedGames = games.sorted { (x,y) in
+                    x.totalRating ?? 0 > y.totalRating ?? 0
+                }
+                break
+            case .firstReleaseDate:
+                sortedGames = games.sorted { (x,y) in
+                    x.firstReleaseDate ?? 0 > y.firstReleaseDate ?? 0
+                }
+                break
+            case .name:
+                sortedGames = games.sorted { (x,y) in
+                    x.name > y.name
+                }
+                break
+            case .hypes:
+                sortedGames = games.sorted { (x,y) in
+                    x.name < y.name
+                }
+                break
             }
-            break
         }
-        loadingState = CollectionLoadingState.loaded(content: newGames)
+        loadingState = CollectionLoadingState.loaded(content: sortedGames)
     }
     
+    
+    
     // MARK: - WIP
-    func sortOrderToggle() {
+    func toggleSortOrder() {
         switch sortOrder {
-        case .ASCENDING:
-            sortOrder = .DESCENDING
+        case .ascending:
+            sortOrder = .descending
             break
-        case .DESCENDING:
-            sortOrder = .ASCENDING
+        case .descending:
+            sortOrder = .ascending
             break
         }
     }
     
     // MARK: - WIP
     func sortList() {
-        sortOrderToggle()
+        toggleSortOrder()
         sort()
     }
     
-}
-
-// MARK: - WIP
-enum IGDBImageSize: String {
-    case micro = "micro"
-    case thumbnail = "thumb"
-    case coverSmall = "cover_small"
-    case logoMed = "logo_med"
-    case coverBig = "cover_big"
-    case screenshotMedium = "screenshot_med"
-    case screenshotBig = "screenshot_big"
-    case screenshotHuge = "screenshot_huge"
-    case hd = "720p"
-    case fhd = "1080p"
 }

@@ -23,7 +23,7 @@ public struct ShimmerConfiguration {
         initialLocation: (start: UnitPoint(x: -1, y: 0.5), end: .leading),
         finalLocation: (start: .trailing, end: UnitPoint(x: 2, y: 0.5)),
         duration: 1,
-        opacity: 0.2
+        opacity: 0.3
     )
 }
 

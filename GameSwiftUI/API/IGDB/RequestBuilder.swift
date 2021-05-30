@@ -8,8 +8,8 @@
 import Foundation
 
 protocol RequestBuilderProtocol {
-    func setBaseUrl(_ url: RequestBaseUrl) -> RequestBuilderProtocol
-    func setEndpoint(_ string: String) -> RequestBuilderProtocol
+    func setBaseUrl(_ url: IGDBBaseUrl) -> RequestBuilderProtocol
+    func setEndpoint(_ endpoint: IGDBEndpoint) -> RequestBuilderProtocol
     func setQuery(_ query: Query) -> RequestBuilderProtocol
     func setHTTPMethod(_ method: HTTPMethod) -> RequestBuilderProtocol
     func addHeader(_ key: String, _ value: String) -> RequestBuilderProtocol
@@ -18,17 +18,17 @@ protocol RequestBuilderProtocol {
 
 class RequestBuilder : RequestBuilderProtocol{
     private var https: Bool = Config.Request.defaultHttps
-    private var baseUrl: String = Config.Request.defaultBaseUrl
-    private var endpoint: String = Config.Request.defaultEndpoint
+    private var baseUrl: IGDBBaseUrl = Config.Request.defaultBaseUrl
+    private var endpoint: IGDBEndpoint = Config.Request.defaultEndpoint
     private var httpMethod: HTTPMethod = Config.Request.defaultHTTPMethod
     private var query: Query!
     private var headers: [String : String] = [:]
     private var defaultAuth: [String : String] {
         get {
             switch Config.Auth.defaultAuthMethod {
-            case .NONE:
+            case .none:
                 return [:]
-            case .OAUTH:
+            case .oAuth:
                 return Config.Auth.OAuth.credentials
             }
         }
@@ -39,13 +39,13 @@ class RequestBuilder : RequestBuilderProtocol{
         return self
     }
     
-    func setBaseUrl(_ url: RequestBaseUrl) -> RequestBuilderProtocol {
-        self.baseUrl = url.rawValue
+    func setBaseUrl(_ url: IGDBBaseUrl) -> RequestBuilderProtocol {
+        self.baseUrl = url
         return self
     }
     
-    func setEndpoint(_ string: String) -> RequestBuilderProtocol {
-        self.endpoint = string
+    func setEndpoint(_ endpoint: IGDBEndpoint) -> RequestBuilderProtocol {
+        self.endpoint = endpoint
         return self
     }
     
@@ -75,15 +75,15 @@ class RequestBuilder : RequestBuilderProtocol{
         var urlComponents = URLComponents()
         var urlRequest : URLRequest
         urlComponents.scheme = https ? "https" : "http"
-        urlComponents.host = baseUrl
-        urlComponents.path = endpoint
+        urlComponents.host = baseUrl.rawValue
+        urlComponents.path = endpoint.rawValue
 
         switch httpMethod {
-        case .GET:
+        case .get:
             urlComponents.queryItems = query.queryForGET
             urlRequest = URLRequest(url: urlComponents.url!)
             break;
-        case .POST:
+        case .post:
             urlRequest = URLRequest(url: urlComponents.url!)
             urlRequest.setValue("text/plain", forHTTPHeaderField: "Content-Type")
             urlRequest.httpBody = query.queryForPOST.data(using: .utf8)
@@ -111,11 +111,11 @@ class RequestBuilder : RequestBuilderProtocol{
 }
 
 enum HTTPMethod: String {
-    case GET = "GET"
-    case POST = "POST"
+    case get = "GET"
+    case post = "POST"
 }
 
 enum RequestAuthMethod {
-    case NONE
-    case OAUTH
+    case none
+    case oAuth
 }

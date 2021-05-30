@@ -20,6 +20,7 @@ class GameService : GameServiceProtocol {
     
     func fetchGames(query: Query) -> AnyPublisher<[Game], Error> {
         let urlRequest = createUrlRequest(query)
+        print(urlRequest.url?.absoluteString)
         return URLSession.shared.dataTaskPublisher(for: urlRequest)
             .map(\.data)
             .decode(type: [Game].self, decoder: JSONDecoder())

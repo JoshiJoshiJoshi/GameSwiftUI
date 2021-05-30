@@ -19,7 +19,7 @@ class NewsService : NewsServiceProtocol {
         return URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: Announcement.self, decoder: JSONDecoder())
-            .map { $0.data }
+            .map(\.data)
             .eraseToAnyPublisher()
     }
 }

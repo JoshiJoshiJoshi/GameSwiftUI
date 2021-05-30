@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-public struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorView: View>: View {
+public struct CollectionLoadingView<Item, Content: View, InitialView: View, EmptyView: View, ErrorView: View>: View {
     private let fade = AnyTransition.opacity.animation(Animation.easeInOut(duration: 0.2))
     private let state: CollectionLoadingState<[Item]>
     private let makeContent: ([Item]) -> Content
-    private let makeInitial: () -> EmptyView
+    private let makeInitial: () -> InitialView
     private let makeEmpty: () -> EmptyView
     private let makeError: (Error) -> ErrorView
     public init(
         loadingState: CollectionLoadingState<[Item]>,
         @ViewBuilder content: @escaping ([Item]) -> Content,
-        @ViewBuilder initial: @escaping () -> EmptyView,
+        @ViewBuilder initial: @escaping () -> InitialView,
         @ViewBuilder empty: @escaping () -> EmptyView,
         @ViewBuilder error: @escaping (Error) -> ErrorView
     ) {
@@ -47,7 +47,6 @@ public struct CollectionLoadingView<Item, Content: View, EmptyView: View, ErrorV
         case let .error(error):
             makeError(error)
                 .transition(fade)
-            
         }
     }
 }
